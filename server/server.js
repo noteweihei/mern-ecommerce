@@ -10,14 +10,16 @@ const adminRoute = require("./routes/admin");
 
 const app = express();
 
-// connect cloud database
-mongoose
-  .connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-    useUnifiedTopology: false,
-  })
-  .then(() => console.log("เชื่อมต่อเรียบร้อย"))
-  .catch((err) => console.log(err));
+// เชื่อมต่อฐานข้อมูล MongoDB
+const db = async () => {
+  try {
+    await mongoose.connect(process.env.MY_DATABASE);
+    console.log("เชื่อมต่อเรียบร้อย");
+  } catch (error) {
+    console.log(err);
+  }
+};
+db();
 
 // middleware
 app.use(bodyParse.json({ limit: "10mb" }));
