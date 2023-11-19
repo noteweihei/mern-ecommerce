@@ -5,7 +5,7 @@ exports.product = async (req, res) => {
     const getAll = await Products.find({}).exec();
     res.json(getAll);
   } catch (error) {
-    res.status(500).json({ message: "ไม่พบข้อมูลสินค้าทั้งหมด", error: error });
+    res.status(500).json({ error: "ไม่พบข้อมูลสินค้าทั้งหมด" });
   }
 };
 exports.singleProduct = async (req, res) => {
@@ -14,7 +14,7 @@ exports.singleProduct = async (req, res) => {
     const getSingle = await Products.findOne({ _id: id }).exec();
     res.json(getSingle);
   } catch (error) {
-    res.status(500).json({ message: "ไม่พบข้อมูลสินค้าตัวนี้", error: error });
+    res.status(500).json({ error: "ไม่พบข้อมูลสินค้าตัวนี้" });
   }
 };
 
@@ -24,9 +24,7 @@ exports.addProduct = async (req, res) => {
     res.json(createProduct);
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "เกิดข้อผิดพลาดในการบันทึกข้อมูล", error: error });
+    res.status(500).json({ error: "เกิดข้อผิดพลาดในการบันทึกข้อมูล" });
   }
 };
 
@@ -38,7 +36,7 @@ exports.editProduct = async (req, res) => {
     }).exec();
     res.json(update);
   } catch (error) {
-    res.status(500).json({ message: "ไม่สามารถอัพเดทข้อมูลได้", error: error });
+    res.status(500).json({ error: "ไม่สามารถอัพเดทข้อมูลได้" });
   }
 };
 exports.deleteProduct = async (req, res) => {
@@ -47,8 +45,6 @@ exports.deleteProduct = async (req, res) => {
     const deletePd = await Products.findOneAndDelete({ _id: id }).exec();
     res.json(deletePd);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "ไม่พบข้อมูลที่ต้องการจะลบ", error: error });
+    res.status(500).json({ error: "ไม่พบข้อมูลที่ต้องการจะลบ" });
   }
 };
