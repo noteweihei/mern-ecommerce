@@ -7,10 +7,12 @@ const {
   editProduct,
   deleteProduct,
 } = require("../controller/adminController");
-router.get("/product", product);
-router.get("/product/:id", singleProduct);
-router.post("/addproduct", addProduct);
-router.put("/editproduct", editProduct);
-router.delete("/deleteproduct", deleteProduct);
+const { requireLogin } = require("../middleware/auth");
+
+router.get("/product", requireLogin, product);
+router.get("/product/:id", requireLogin, singleProduct);
+router.post("/addproduct", requireLogin, addProduct);
+router.put("/editproduct/:id", requireLogin, editProduct);
+router.delete("/deleteproduct/:id", requireLogin, deleteProduct);
 
 module.exports = router;

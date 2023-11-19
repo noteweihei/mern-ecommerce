@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const bodyParse = require("body-parser");
 require("dotenv").config();
 
 const authRoute = require("./routes/auth");
@@ -22,7 +21,7 @@ const db = async () => {
 db();
 
 // middleware
-app.use(bodyParse.json({ limit: "10mb" }));
+app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
