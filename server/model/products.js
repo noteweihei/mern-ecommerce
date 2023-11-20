@@ -17,6 +17,9 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
     },
+    file: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
