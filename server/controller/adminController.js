@@ -39,6 +39,11 @@ exports.addProduct = async (req, res) => {
 exports.editProduct = async (req, res) => {
   try {
     const id = req.params.id;
+    let newData = req.body;
+    if (typeof req.file !== "undefined") {
+      newData.file = req.file.filename;
+      await fs.unlink("./uploads/" + newData.oldImg, (err) => console.log(err));
+    }
     const update = await Products.findOneAndUpdate({ _id: id }, req.body, {
       new: true,
     }).exec();

@@ -4,7 +4,6 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-
 const DataProduct = () => {
   const [product, setProduct] = useState([]);
   const [dataProduct, setDataProduct] = useState({});
@@ -22,26 +21,35 @@ const DataProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const dataUploadIMG = new FormData();
+    for (const key in dataProduct) {
+      dataUploadIMG.append(key, dataProduct[key]);
+    }
     await axios
-      .post(`${import.meta.env.VITE_URL}/addproduct`, dataProduct)
+      .post(`${import.meta.env.VITE_URL}/addproduct`, dataUploadIMG)
       .then(() => {
         alert("บันทึกข้อมูลเรียบร้อย");
         loadData();
-        setDataProduct({
-          ...dataProduct,
-          name: "",
-          desp: "",
-          price: "",
-          stock: "",
-        });
+        window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err);
+        e.preventDefault();
+      });
   };
+
   const handleChange = (e) => {
-    setDataProduct({
-      ...dataProduct,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "file") {
+      setDataProduct({
+        ...dataProduct,
+        [e.target.name]: e.target.files[0],
+      });
+    } else {
+      setDataProduct({
+        ...dataProduct,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleDelete = async (id) => {
@@ -56,7 +64,11 @@ const DataProduct = () => {
 
   return (
     <>
-      <Form className="my-5" onSubmit={handleSubmit}>
+      <Form
+        className="my-5"
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+      >
         <div className="row">
           <Form.Group
             className="mb-3 col-md-4"
@@ -85,7 +97,11 @@ const DataProduct = () => {
           </Form.Group>
           <Form.Group controlId="formFile" className="mb-3 col-md-4">
             <Form.Label>อัพโหลดรูปภาพ</Form.Label>
-            <Form.Control type="file" />
+            <Form.Control
+              type="file"
+              name="file"
+              onChange={(event) => handleChange(event)}
+            />
           </Form.Group>
           <Form.Group
             className="mb-3 col-md-4"
@@ -125,7 +141,8 @@ const DataProduct = () => {
             <th>รายละเอียด</th>
             <th>ราคา</th>
             <th>Stock</th>
-            <th>action</th>
+            <th>ลบ</th>
+            <th>แก้ไข</th>
           </tr>
         </thead>
         <tbody>
@@ -139,15 +156,17 @@ const DataProduct = () => {
                   <td>{data.price}</td>
                   <td>{data.stock}</td>
                   <td>
-                    <Link to={`/edit/${data._id}`} className="btn btn-primary">
-                      แก้ไขข้อมูล
-                    </Link>{" "}
                     <button
                       onClick={() => handleDelete(data._id)}
                       className="btn btn-danger"
                     >
                       ลบข้อมูล
                     </button>
+                  </td>
+                  <td>
+                    <Link to={`/edit/${data._id}`} className="btn btn-primary">
+                      แก้ไข
+                    </Link>
                   </td>
                 </tr>
               ))

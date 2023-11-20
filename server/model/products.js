@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema(
     },
     file: {
       type: String,
+      default: "none.jpg",
     },
   },
   { timestamps: true }
