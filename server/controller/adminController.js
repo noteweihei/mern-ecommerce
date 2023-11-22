@@ -28,8 +28,6 @@ exports.addProduct = async (req, res) => {
     }
     const createProduct = await Products(data).save();
     res.json(createProduct);
-    // console.log(data);
-    // res.send("upload successfully");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "เกิดข้อผิดพลาดในการบันทึกข้อมูล" });

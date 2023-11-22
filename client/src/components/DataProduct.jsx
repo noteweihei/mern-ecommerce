@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const DataProduct = () => {
   const [product, setProduct] = useState([]);
   const [dataProduct, setDataProduct] = useState({});
+  console.log(dataProduct);
 
   useEffect(() => {
     loadData();
@@ -15,7 +16,10 @@ const DataProduct = () => {
   const loadData = async () => {
     await axios
       .get(`${import.meta.env.VITE_URL}/product`)
-      .then((res) => setProduct(res.data))
+      .then((res) => {
+        setProduct(res.data);
+        console.log(res.data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -150,7 +154,13 @@ const DataProduct = () => {
             ? product.map((data, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{data.file}</td>
+                  <td>
+                    <img
+                      src={`${import.meta.env.VITE_LINK_IMG}/${data.file}`}
+                      width={50}
+                      height={50}
+                    />
+                  </td>
                   <td>{data.name}</td>
                   <td>{data.desp}</td>
                   <td>{data.price}</td>

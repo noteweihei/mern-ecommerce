@@ -24,6 +24,7 @@ db();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.static("uploads"));
 
 // path api
 app.use("/api", authRoute);

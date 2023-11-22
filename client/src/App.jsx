@@ -4,6 +4,8 @@ import HomeAdmin from "./components/HomeAdmin";
 import LayoutAdmin from "./Layout/LayoutAdmin";
 import EditProduct from "./components/EditProduct";
 
+// Layout
+
 const App = () => {
   return (
     <Router>
