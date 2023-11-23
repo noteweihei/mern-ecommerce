@@ -1,11 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const bodyParse = require("body-parser");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const authRoute = require("./routes/auth");
-const adminRoute = require("./routes/admin");
+// const authRoute = require("./routes/auth");
+// const adminRoute = require("./routes/admin");
+
+const { readdirSync } = require("fs");
 
 const app = express();
 
@@ -21,14 +24,16 @@ const db = async () => {
 db();
 
 // middleware
-app.use(express.json());
+app.use(bodyParse.json({ limit: "10mb" }));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.static("uploads"));
 
 // path api
-app.use("/api", authRoute);
-app.use("/api", adminRoute);
+// app.use("/api", authRoute);
+// app.use("/api", adminRoute);
+
+readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 
 const port = process.env.PORT || 8080;
 

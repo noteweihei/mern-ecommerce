@@ -9,19 +9,17 @@ exports.register = async (req, res) => {
 
     // ตรวจสอบข้อมูลในระบบก่อน
     if (users) {
-      return res
-        .status(400)
-        .json({ message: "คุณมีข้อมูลอยู่แล้ว", email: users.email });
+      return res.send("คุณมีข้อมูลอยู่แล้ว").status(400);
     } else {
       users = new Users({
         email,
         password,
       });
       await users.save();
-      res.json({ message: "ลงทะเบียนสำเร็จ" });
+      res.send("ลงทะเบียนสำเร็จ");
     }
   } catch (error) {
-    res.status(400).json({ error: "เกิดข้อผิดพลาดไม่สามารถลงทะเบียนได้" });
+    res.send("เกิดข้อผิดพลาดไม่สามารถลงทะเบียนได้").status(400);
   }
 };
 
@@ -29,14 +27,46 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    let users = await Users.findOneAndUpdate({ password }, { new: true });
-    if (users.password === password) {
-      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-      return res.json({ token, email });
+    let users = await Users.findOneAndUpdate({ email }, { new: true });
+    console.log(users);
+    if (users.email === email && users.password === password) {
+      // const token = jwt.sign({ email, role }, process.env.JWT_SECRET, {
+      //   expiresIn: "1h",
+      // });
+      // return res.json({ token, email });
+      var payload = {
+        user: {
+          name: users.email,
+          role: users.role,
+        },
+      };
+      // 3. Generate
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token, payload });
+        }
+      );
+    } else {
+      return res.send("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง");
     }
   } catch (error) {
-    res.status(400).json({ error: "รหัสผ่านไม่ถูกต้อง" });
+    res.status(400).send("เซิร์ฟเวอร์เกิดข้อผิดพลาด");
+  }
+};
+
+// เช็ค Token กับ ยูสเซอร์ มีการล็อคอินหรือไม่
+exports.currentUser = async (req, res) => {
+  try {
+    const user = await Users.findOne({ email: req.user.name })
+      .select("-password")
+      .exec();
+    return res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("เซิร์ฟเวอร์ เกิดข้อผิดพลาด");
   }
 };

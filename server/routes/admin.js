@@ -7,7 +7,7 @@ const {
   editProduct,
   deleteProduct,
 } = require("../controller/adminController");
-const { requireLogin } = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 const { upload } = require("../middleware/upload");
 
 router.get("/product", product);

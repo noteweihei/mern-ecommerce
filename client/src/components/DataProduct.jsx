@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 const DataProduct = () => {
   const [product, setProduct] = useState([]);
   const [dataProduct, setDataProduct] = useState({});
-  console.log(dataProduct);
 
   useEffect(() => {
     loadData();
@@ -18,7 +17,6 @@ const DataProduct = () => {
       .get(`${import.meta.env.VITE_URL}/product`)
       .then((res) => {
         setProduct(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -140,13 +138,10 @@ const DataProduct = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>รูปสินค้า</th>
             <th>ชื่อสินค้า</th>
-            <th>รายละเอียด</th>
             <th>ราคา</th>
-            <th>Stock</th>
-            <th>ลบ</th>
-            <th>แก้ไข</th>
+            <th>สต๊อก</th>
+            <th>action</th>
           </tr>
         </thead>
         <tbody>
@@ -154,15 +149,7 @@ const DataProduct = () => {
             ? product.map((data, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>
-                    <img
-                      src={`${import.meta.env.VITE_LINK_IMG}/${data.file}`}
-                      width={50}
-                      height={50}
-                    />
-                  </td>
                   <td>{data.name}</td>
-                  <td>{data.desp}</td>
                   <td>{data.price}</td>
                   <td>{data.stock}</td>
                   <td>
@@ -171,11 +158,12 @@ const DataProduct = () => {
                       className="btn btn-danger"
                     >
                       ลบข้อมูล
-                    </button>
-                  </td>
-                  <td>
-                    <Link to={`/edit/${data._id}`} className="btn btn-primary">
-                      แก้ไข
+                    </button>{" "}
+                    <Link
+                      to={`/admin/edit/${data._id}`}
+                      className="btn btn-primary"
+                    >
+                      Views
                     </Link>
                   </td>
                 </tr>

@@ -9,7 +9,7 @@ body,
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
   background-color: #f7fff7;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 .content_body {
   background-color: rgb(223, 255, 216);

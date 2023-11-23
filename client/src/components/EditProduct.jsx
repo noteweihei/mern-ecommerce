@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const EditProduct = () => {
   const params = useParams();
@@ -14,7 +14,6 @@ const EditProduct = () => {
   });
   const [oldImg, setOldImg] = useState();
 
-  const navigate = useNavigate();
   useEffect(() => {
     loadData(params.id);
   }, [params]);
@@ -40,7 +39,7 @@ const EditProduct = () => {
       .put(`${import.meta.env.VITE_URL}/editproduct/${params.id}`, dataUpdate)
       .then((res) => {
         alert("ทำการอัพเดทข้อมูลเรียบร้อย", res);
-        navigate("/create");
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
@@ -61,7 +60,7 @@ const EditProduct = () => {
 
   return (
     <div className="container mt-5">
-      <h1>Edit Product</h1>
+      <h1>แก้ไขสินค้า</h1>
       <Form
         className="my-5"
         onSubmit={handleSubmit}
@@ -131,17 +130,19 @@ const EditProduct = () => {
         </Button>
       </Form>
       <hr />
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
-          <a href="#" class="btn btn-primary">
-            Go somewhere
-          </a>
+      <div className="card" style={{ width: "30rem" }}>
+        <div className="d-flex justify-content-between align-items-center m-3 p-2">
+          <img
+            src={`${import.meta.env.VITE_LINK_IMG}/${product.file}`}
+            className="card-img-top"
+            style={{ objectFit: "cover", width: "200px", height: "200px" }}
+          />
+          <div className="card-body">
+            <h5 className="card-title">{product.name}</h5>
+            <p className="card-text">{product.desp}</p>
+            <p className="card-text">{product.price} ฿</p>
+            <p className="card-text">{product.stock} ชิ้น</p>
+          </div>
         </div>
       </div>
     </div>
