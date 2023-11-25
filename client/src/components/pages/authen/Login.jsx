@@ -28,8 +28,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://www.facebook.com/methasit.bunthanom">
+        Valentinote Zyzap
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -96,7 +96,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            เข้าสู่ระบบเพื่อใช้งาน
           </Typography>
           <Box
             component="form"
@@ -134,17 +134,17 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              เข้าสู่ระบบ
             </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                  ลืมรหัสผ่าน?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/register" variant="body2">
+                  {"คุณยังไม่มีบัญชี ใช่หรือไม่ ?"}
                 </Link>
               </Grid>
             </Grid>

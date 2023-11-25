@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
+
 const EditProduct = () => {
   const params = useParams();
   const [product, setProduct] = useState({
@@ -60,90 +66,150 @@ const EditProduct = () => {
 
   return (
     <div className="container mt-5">
-      <h1>แก้ไขสินค้า</h1>
-      <Form
-        className="my-5"
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
       >
-        <div className="row">
-          <Form.Group
-            className="mb-3 col-md-4"
-            controlId="exampleForm.ControlInput1"
-          >
-            <Form.Label>ชื่อสินค้า</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={product.name}
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-          <Form.Group
-            className="mb-3 col-md-6"
-            controlId="exampleForm.ControlTextarea1"
-          >
-            <Form.Label>รายละเอียดสินค้า</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="desp"
-              rows={3}
-              value={product.desp}
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-          <Form.Group controlId="formFile" className="mb-3 col-md-4">
-            <Form.Label>อัพโหลดรูปภาพ</Form.Label>
-            <Form.Control
-              type="file"
-              name="file"
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-          <Form.Group
-            className="mb-3 col-md-4"
-            controlId="exampleForm.ControlInput1"
-          >
-            <Form.Label>ราคา</Form.Label>
-            <Form.Control
-              type="number"
-              name="price"
-              value={product.price}
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-          <Form.Group
-            className="mb-3 col-md-4"
-            controlId="exampleForm.ControlInput1"
-          >
-            <Form.Label>สต๊อกสินค้า</Form.Label>
-            <Form.Control
-              type="number"
-              name="stock"
-              value={product.stock}
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-        </div>
-        <Button variant="danger" type="submit">
-          บันทึกข้อมูล
-        </Button>
-      </Form>
-      <hr />
-      <div className="card" style={{ width: "30rem" }}>
-        <div className="d-flex justify-content-between align-items-center m-3 p-2">
-          <img
-            src={`${import.meta.env.VITE_LINK_IMG}/${product.file}`}
-            className="card-img-top"
-            style={{ objectFit: "cover", width: "200px", height: "200px" }}
-          />
-          <div className="card-body">
-            <h5 className="card-title">{product.name}</h5>
-            <p className="card-text">{product.desp}</p>
-            <p className="card-text">{product.price} ฿</p>
-            <p className="card-text">{product.stock} ชิ้น</p>
+        แก้ไขสินค้า
+      </button>
+      {/* Modal Pop up */}
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                แก้ไขข้อมูลสินค้า
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <Form
+                className="my-5"
+                onSubmit={handleSubmit}
+                encType="multipart/form-data"
+              >
+                <div className="row">
+                  <Form.Group
+                    className="mb-3 col-md-4"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>ชื่อสินค้า</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={product.name}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3 col-md-6"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>รายละเอียดสินค้า</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name="desp"
+                      rows={3}
+                      value={product.desp}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formFile" className="mb-3 col-md-4">
+                    <Form.Label>อัพโหลดรูปภาพ</Form.Label>
+                    <Form.Control
+                      type="file"
+                      name="file"
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3 col-md-4"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>ราคา</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="price"
+                      value={product.price}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3 col-md-4"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>สต๊อกสินค้า</Form.Label>
+                    <Form.Control
+                      type="number"
+                      name="stock"
+                      value={product.stock}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Form.Group>
+                </div>
+                <Button variant="danger" type="submit">
+                  บันทึกข้อมูล
+                </Button>
+              </Form>
+            </div>
           </div>
         </div>
+      </div>
+
+      <hr />
+      <div className="d-flex justify-content-center my-2">
+        <Card sx={{ width: 500, borderRadius: 3 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              width={"200"}
+              image={`${import.meta.env.VITE_LINK_IMG}/${product.file}`}
+              alt="green iguana"
+            />
+
+            <CardContent>
+              <Typography
+                gutterBottom
+                variant="h3"
+                color="secondary"
+                component="div"
+              >
+                {product.name}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                className="my-2"
+              >
+                <h6>รายละเอียดสินค้า</h6>
+                {product.desp}
+              </Typography>
+              <div className="d-flex justify-content-between">
+                <Typography variant="body2" color="primary">
+                  สินค้าในสต๊อก {product.stock} ชิ้น
+                </Typography>
+                <Typography variant="body2" color="primary">
+                  ราคา {product.price} ฿
+                </Typography>
+              </div>
+            </CardContent>
+          </CardActionArea>
+        </Card>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -11,6 +11,9 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import TableViewIcon from "@mui/icons-material/TableView";
+import Bgimage from "../assets/background.png";
+import Avatars from "../assets/avatar.jpg";
+
 const SideBar = () => {
   const [isCollapsed, setisCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
@@ -28,7 +31,7 @@ const SideBar = () => {
         toggled={toggled}
         onBackdropClick={() => setToggled(false)}
         onBreakPoint={setBroken}
-        image="#"
+        image={Bgimage}
         breakPoint="md"
         style={{ height: "100%" }}
       >
@@ -52,7 +55,7 @@ const SideBar = () => {
                     alignItems="center"
                     ml="15px"
                   >
-                    <Typography>ROITAI APP</Typography>
+                    <Typography>ระบบแอดมิน</Typography>
                     <IconButton onClick={() => setisCollapsed(!isCollapsed)}>
                       <MenuOutlinedIcon />
                     </IconButton>
@@ -70,12 +73,14 @@ const SideBar = () => {
                       alt="profile-user"
                       width="100px"
                       height="100px"
-                      src={`/assets/user.jpg`}
+                      src={Avatars}
                       style={{ cursor: "pointer", borderRadius: "50%" }}
                     />
                   </Box>
                   <Box textAlign="center">
-                    <Typography sx={{ m: "10px 0 0 0" }}>ROITAI</Typography>
+                    <Typography sx={{ m: "10px 0 0 0" }}>
+                      Valentinote
+                    </Typography>
                     <Typography>DEV </Typography>
                   </Box>
                 </Box>
@@ -86,8 +91,8 @@ const SideBar = () => {
               </Link>
 
               <SubMenu icon={<MapOutlinedIcon />} label="Data">
-                <Link to={"/admin/viewtable"} className="menu-bars">
-                  <MenuItem icon={<TableViewIcon />}> Table</MenuItem>
+                <Link to={"/admin/create"} className="menu-bars">
+                  <MenuItem icon={<TableViewIcon />}> จัดการสินค้า</MenuItem>
                 </Link>
                 <MenuItem icon={<BarChartOutlinedIcon />}>
                   {" "}
