@@ -17,19 +17,21 @@ import HomePageAdmin from "./components/pages/admin/HomePageAdmin";
 import DataProduct from "./components/DataProduct";
 import EditProduct from "./components/EditProduct";
 import { login } from "./store/userSlice";
+import Page404 from "./components/Page404";
+import { CssBaseline } from "@mui/material";
+import ResponsiveAppBar from "./components/ResponsiveAppBar";
 
 const App = () => {
   const dispatch = useDispatch();
-
   const idToken = localStorage.getItem("token");
-  const getToken = () => {
-    axios
+  const getUser = async (token) => {
+    await axios
       .post(
         `${import.meta.env.VITE_URL}/current-user`,
         {},
         {
           headers: {
-            authtoken: idToken,
+            Authorization: `${token}`,
           },
         }
       )
@@ -38,24 +40,24 @@ const App = () => {
           login({
             name: res.data.email,
             role: res.data.role,
-            token: idToken,
+            token: token,
           })
         );
       })
       .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    getToken();
-  }, []);
+  getUser(idToken);
 
   return (
     <BrowserRouter>
+      <CssBaseline />
+      <ResponsiveAppBar />
       <Routes>
         {/* public */}
         <Route path="/" element={<HomeComponent />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Page404 />} />
         {/* user */}
         <Route
           path="/user"

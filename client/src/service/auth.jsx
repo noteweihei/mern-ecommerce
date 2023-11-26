@@ -1,12 +1,13 @@
 import axios from "axios";
 
-export const currentUser = async (authtoken) => {
+export const currentAdmin = async () => {
+  const token = localStorage.getItem("token");
   await axios.post(
-    `${import.meta.env.VITE_URL}/current-user`,
+    `${import.meta.env.VITE_URL}/current-admin`,
     {},
     {
       headers: {
-        authtoken: authtoken,
+        Authorization: token,
       },
     }
   );

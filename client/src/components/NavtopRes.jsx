@@ -72,7 +72,7 @@ function NavtopRes() {
                       color="primary"
                     />
                   </Nav.Link>
-                  &nbsp; &nbsp; &nbsp; &nbsp;
+                  &nbsp; &nbsp;
                   <Nav.Link href="/admin/create">
                     <LogoutIcon
                       titleAccess="ออกจากระบบ"

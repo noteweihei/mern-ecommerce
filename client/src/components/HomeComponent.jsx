@@ -1,5 +1,4 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -13,6 +12,7 @@ import Container from "@mui/material/Container";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import NavBar from "./NavBar";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -37,10 +37,10 @@ export default function HomeComponent() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Container sx={{ py: 1 }} maxWidth="md">
+      <Container sx={{ py: 1, my: 10 }} maxWidth="md">
         <Grid container spacing={4}>
-          {product.map((data) => (
-            <Grid item key={data} xs={12} sm={6} md={4}>
+          {product.map((data, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
               <Card
                 sx={{
                   height: "100%",
@@ -60,7 +60,7 @@ export default function HomeComponent() {
                   <Typography gutterBottom variant="h5" component="h2">
                     {data.name}
                   </Typography>
-                  <Typography>{data.desp}</Typography>
+                  <Typography>{data.desp.substring(0, 180)}</Typography>
                 </CardContent>
                 <CardActions className="d-flex justify-content-between">
                   <Button size="small">ราคา {data.price} บาท</Button>

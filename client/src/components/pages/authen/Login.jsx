@@ -55,7 +55,6 @@ export default function Login() {
     axios
       .post(`${import.meta.env.VITE_URL}/login`, dataCustom)
       .then((res) => {
-        console.log(res);
         alert("เข้าสู่ระบบเรียบร้อย");
         dispatch(
           loginRedux({
@@ -123,10 +122,6 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"

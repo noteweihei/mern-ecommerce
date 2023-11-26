@@ -1,6 +1,6 @@
 const Users = require("../model/userData");
 const jwt = require("jsonwebtoken");
-
+const expressJWT = require("express-jwt");
 //สมัคร username && password เพื่อเข้าใช้งาน
 exports.register = async (req, res) => {
   try {
@@ -28,7 +28,6 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     let users = await Users.findOneAndUpdate({ email }, { new: true });
-    console.log(users);
     if (users.email === email && users.password === password) {
       // const token = jwt.sign({ email, role }, process.env.JWT_SECRET, {
       //   expiresIn: "1h",
@@ -70,3 +69,10 @@ exports.currentUser = async (req, res) => {
     res.status(500).send("เซิร์ฟเวอร์ เกิดข้อผิดพลาด");
   }
 };
+
+//ตรวจสอบ token
+exports.requireLogin = expressJWT({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
+  userProperty: "auth",
+});
