@@ -42,40 +42,35 @@ function NavtopRes() {
                       titleAccess="หน้าแรก"
                       fontSize="large"
                       color="primary"
-                    />{" "}
-                    หน้าแรก
+                    />
                   </Nav.Link>
                   <Nav.Link href="/admin/create">
                     <Inventory2Icon
                       titleAccess="จัดการสินค้า"
                       fontSize="large"
                       color="primary"
-                    />{" "}
-                    จัดการสินค้า
+                    />
                   </Nav.Link>
                   <Nav.Link href="/admin/create">
                     <ContactEmergencyIcon
                       titleAccess="จัดการสินค้า"
                       fontSize="large"
                       color="primary"
-                    />{" "}
-                    จัดการข้อมูลลูกค้า
+                    />
                   </Nav.Link>
                   <Nav.Link href="/admin/create">
                     <AssessmentIcon
                       titleAccess="รายงานสถิติ"
                       fontSize="large"
                       color="primary"
-                    />{" "}
-                    รายงาน
+                    />
                   </Nav.Link>
                   <Nav.Link href="/admin/create">
                     <AssignmentIndIcon
                       titleAccess="ข้อมูลผู้ใช้งาน"
                       fontSize="large"
                       color="primary"
-                    />{" "}
-                    ข้อมูลผู้ใช้งาน
+                    />
                   </Nav.Link>
                   &nbsp; &nbsp; &nbsp; &nbsp;
                   <Nav.Link href="/admin/create">

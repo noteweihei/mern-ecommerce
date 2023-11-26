@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import axios from "axios";
 // Redux/toolkit
 import { useDispatch } from "react-redux";
+// public
+import HomeComponent from "./components/HomeComponent";
 // login && Register
 import Register from "./components/pages/authen/Register";
 import Login from "./components/pages/authen/Login";
@@ -50,6 +52,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* public */}
+        <Route path="/" element={<HomeComponent />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* user */}

@@ -1,27 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
+
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import ListProduct from "../components/ListProduct";
+
 const DataProduct = () => {
-  const [product, setProduct] = useState([]);
   const [dataProduct, setDataProduct] = useState({});
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    await axios
-      .get(`${import.meta.env.VITE_URL}/product`)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +18,6 @@ const DataProduct = () => {
       .post(`${import.meta.env.VITE_URL}/addproduct`, dataUploadIMG)
       .then(() => {
         alert("บันทึกข้อมูลเรียบร้อย");
-        loadData();
         window.location.reload();
       })
       .catch((err) => {
@@ -56,18 +40,8 @@ const DataProduct = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    await axios
-      .delete(`${import.meta.env.VITE_URL}/deleteproduct/${id}`)
-      .then(() => {
-        alert("ลบข้อมูลเรียบร้อย");
-        loadData();
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
-    <div className="container">
+    <div>
       <button
         type="button"
         className="btn btn-primary my-3 "
@@ -170,52 +144,7 @@ const DataProduct = () => {
           </div>
         </div>
       </div>
-      <Table striped bordered hover className="text-center">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>ชื่อสินค้า</th>
-            <th>ราคา</th>
-            <th>สต๊อก</th>
-            <th>Delete</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {product
-            ? product.map((data, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{data.name}</td>
-                  <td>{data.price}</td>
-                  <td>{data.stock}</td>
-                  <td>
-                    <button
-                      onClick={() => handleDelete(data._id)}
-                      className="btn btn-danger"
-                    >
-                      <DeleteForeverIcon
-                        titleAccess="ลบข้อมูลสินค้า"
-                        sx={{ fontSize: 30 }}
-                      />
-                    </button>
-                  </td>
-                  <td>
-                    <Link
-                      to={`/admin/edit/${data._id}`}
-                      className="btn btn-primary"
-                    >
-                      <EditNoteIcon
-                        titleAccess="แก้ไขข้อมูลสินค้า"
-                        sx={{ fontSize: 30 }}
-                      />
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            : null}
-        </tbody>
-      </Table>
+      <ListProduct />
     </div>
   );
 };

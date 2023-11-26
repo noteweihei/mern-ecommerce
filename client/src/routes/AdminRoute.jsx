@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Navbar from "../components/Navbar";
 import NavtopRes from "../components/NavtopRes";
 
 const AdminRoute = ({ children }) => {

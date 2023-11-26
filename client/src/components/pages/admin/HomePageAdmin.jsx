@@ -1,5 +1,4 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,20 +11,35 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import axios from "axios";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function HomePageAdmin() {
+export default function HomeComponent() {
+  const [product, setProduct] = React.useState([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .get(`${import.meta.env.VITE_URL}/product`)
+        .then((res) => {
+          setProduct(res.data);
+        })
+        .catch((err) => console.log(err));
+    };
+
+    return () => {
+      fetchData();
+    };
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Container sx={{ py: 1 }} maxWidth="md">
         <Grid container spacing={4}>
-          {cards.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
+          {product.map((data, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4}>
               <Card
                 sx={{
                   height: "100%",
@@ -39,20 +53,17 @@ export default function HomePageAdmin() {
                     // 16:9
                     pt: "56.25%",
                   }}
-                  image="https://source.unsplash.com/random?wallpapers"
+                  image={`${import.meta.env.VITE_LINK_IMG}/${data.file}`}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h2">
-                    Heading
+                    {data.name}
                   </Typography>
-                  <Typography>
-                    This is a media card. You can use this section to describe
-                    the content.
-                  </Typography>
+                  <Typography>{data.desp}</Typography>
                 </CardContent>
-                <CardActions>
-                  <Button size="small">View</Button>
-                  <Button size="small">Edit</Button>
+                <CardActions className="d-flex justify-content-between">
+                  <Button size="small">ราคา {data.price} บาท</Button>
+                  <Button size="small">สินค้ามี {data.stock} ชิ้น</Button>
                 </CardActions>
               </Card>
             </Grid>
