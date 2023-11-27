@@ -3,10 +3,10 @@ const {
   login,
   register,
   currentUser,
-  requireLogin,
+  adminCheck,
 } = require("../controller/authController");
 const router = express.Router();
-const { auth, adminCheck } = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 
 router.post("/login", login);
 router.post("/register", register);

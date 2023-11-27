@@ -1,9 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import ResponsiveAppBar from "../Layout/ResponsiveAppBar";
+import Page404 from "../components/Page404";
 
 const UserRoute = ({ children }) => {
   const { user } = useSelector((state) => ({ ...state }));
-  return <>{user && user.user.token ? children : <h1>คุณไม่ได้ล็อคอิน</h1>}</>;
+  return (
+    <>
+      {user && user.user.token ? (
+        <>
+          <ResponsiveAppBar />
+          {children}
+        </>
+      ) : (
+        <Page404 />
+      )}
+    </>
+  );
 };
 
 export default UserRoute;

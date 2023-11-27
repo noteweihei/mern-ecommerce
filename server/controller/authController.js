@@ -70,9 +70,18 @@ exports.currentUser = async (req, res) => {
   }
 };
 
-//ตรวจสอบ token
-exports.requireLogin = expressJWT({
-  secret: process.env.JWT_SECRET,
-  algorithms: ["HS256"],
-  userProperty: "auth",
-});
+exports.adminCheck = async (req, res) => {
+  try {
+    const userAdmin = await Users.findOne({ email: req.user.name })
+      .select("-password")
+      .exec();
+    if (userAdmin.role !== "admin") {
+      res.status(403).send("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+    } else {
+      return res.send(userAdmin);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(403).send("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  }
+};

@@ -14,12 +14,12 @@ import UserRoute from "./routes/UserRoute";
 // admin
 import AdminRoute from "./routes/AdminRoute";
 import HomePageAdmin from "./components/pages/admin/HomePageAdmin";
-import DataProduct from "./components/DataProduct";
-import EditProduct from "./components/EditProduct";
+import DataProduct from "./components/pages/admin/DataProduct";
+import EditProduct from "./components/pages/admin/EditProduct";
 import { login } from "./store/userSlice";
 import Page404 from "./components/Page404";
 import { CssBaseline } from "@mui/material";
-import ResponsiveAppBar from "./components/ResponsiveAppBar";
+import ManageUser from "./components/pages/admin/ManageUser";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -51,10 +51,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <CssBaseline />
-      <ResponsiveAppBar />
       <Routes>
         {/* public */}
         <Route path="/" element={<HomeComponent />} />
+        <Route path="/product" element={<HomeComponent />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Page404 />} />
@@ -90,6 +90,14 @@ const App = () => {
           element={
             <AdminRoute>
               <EditProduct />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/manage"
+          element={
+            <AdminRoute>
+              <ManageUser />
             </AdminRoute>
           }
         />

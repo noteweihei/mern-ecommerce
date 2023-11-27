@@ -12,13 +12,14 @@ import Container from "@mui/material/Container";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import NavBar from "./NavBar";
+import ResponsiveAppBar from "../Layout/ResponsiveAppBar";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function HomeComponent() {
   const [product, setProduct] = React.useState([]);
+  const format = (value) => value.toLocaleString("en-US");
   React.useEffect(() => {
     const fetchData = async () => {
       await axios
@@ -37,6 +38,7 @@ export default function HomeComponent() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
+      <ResponsiveAppBar />
       <Container sx={{ py: 1, my: 10 }} maxWidth="md">
         <Grid container spacing={4}>
           {product.map((data, index) => (
@@ -58,13 +60,15 @@ export default function HomeComponent() {
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h2">
-                    {data.name}
+                    {data.name.substring(0, 20)}
                   </Typography>
                   <Typography>{data.desp.substring(0, 180)}</Typography>
                 </CardContent>
                 <CardActions className="d-flex justify-content-between">
-                  <Button size="small">ราคา {data.price} บาท</Button>
-                  <Button size="small">สินค้ามี {data.stock} ชิ้น</Button>
+                  <Button size="small">ราคา {format(data.price)} บาท</Button>
+                  <Button size="small">
+                    สินค้ามี {format(data.stock)} ชิ้น
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>

@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const User = require("../model/userData");
 
 exports.auth = async (req, res, next) => {
   try {
@@ -16,19 +15,5 @@ exports.auth = async (req, res, next) => {
     // err
     console.log(err);
     res.send("Token Invalid").status(500);
-  }
-};
-
-exports.adminCheck = async (req, res) => {
-  try {
-    const userAdmin = await User.findOne({ email: req.user.name })
-      .select("-password")
-      .exec();
-    if (userAdmin.role !== "admin") {
-      res.status(403).send("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(403).send("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
   }
 };
