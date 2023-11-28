@@ -1,6 +1,5 @@
 const Users = require("../model/userData");
 const jwt = require("jsonwebtoken");
-const expressJWT = require("express-jwt");
 //สมัคร username && password เพื่อเข้าใช้งาน
 exports.register = async (req, res) => {
   try {

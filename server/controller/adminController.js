@@ -1,5 +1,4 @@
 // ติดต่อกับฐานข้อมูล / ดำเนินการกับฐานข้อมูล
-const { log } = require("console");
 const Products = require("../model/products");
 const fs = require("fs");
 exports.product = async (req, res) => {

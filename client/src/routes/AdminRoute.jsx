@@ -8,24 +8,6 @@ import axios from "axios";
 const AdminRoute = ({ children }) => {
   const { user } = useSelector((state) => ({ ...state }));
   const [check, setCheck] = useState(false);
-  // const fetchData = async () => {
-  //   const token = localStorage.getItem("token");
-  //   await axios
-  //     .post(
-  //       `${import.meta.env.VITE_URL}/current-admin`,
-  //       {},
-  //       {
-  //         headers: {
-  //           Authorization: token,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
   useEffect(() => {
     if (user && user.user.token) {
       axios
@@ -39,7 +21,6 @@ const AdminRoute = ({ children }) => {
           }
         )
         .then((res) => {
-          console.log(res);
           setCheck(true);
         })
         .catch((err) => {

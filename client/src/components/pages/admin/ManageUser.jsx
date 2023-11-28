@@ -1,5 +1,4 @@
 import * as React from "react";
-import axios from "axios";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,52 +7,44 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { MenuItem, Select } from "@mui/material";
 
-const ManageUser = () => {
-  const columns = [
-    { id: "id", label: "ลำดับ", minWidth: 80, align: "left" },
-    { id: "name", label: "ชื่อสินค้า", minWidth: 170 },
-    {
-      id: "price",
-      label: "ราคา",
-      align: "center",
-      minWidth: 170,
-    },
-    {
-      id: "stock",
-      label: "สินค้าในคลัง",
-      align: "center",
-      minWidth: 170,
-    },
-    {
-      id: "action",
-      label: "ลบ/แก้ไข",
-      align: "center",
-      minWidth: 170,
-    },
-  ];
+const columns = [
+  { id: "email", label: "Email", minWidth: 170 },
+  { id: "password", label: "Password", minWidth: 170 },
+  { id: "role", label: "Role", minWidth: 170 },
+  { id: "date", label: "Last Login", minWidth: 170 },
+];
 
+export default function StickyHeadTable() {
+  const { user } = useSelector((state) => ({ ...state }));
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [dataRows, setDataRows] = React.useState([]);
-  const format = (value) => value.toLocaleString("en-US");
+  const [data, setData] = React.useState([]);
+  const role = ["admin", "user"];
+
   React.useEffect(() => {
-    const fetchData = async () => {
+    const loadData = async () => {
       await axios
-        .get(`${import.meta.env.VITE_URL}/product`)
-        .then((res) => {
-          setDataRows(res.data);
+        .get(`${import.meta.env.VITE_URL}/user`, {
+          headers: {
+            Authorization: user.user.token,
+          },
         })
-        .catch((err) => console.log(err));
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     return () => {
-      fetchData();
+      loadData();
     };
-  }, []);
+  }, [user]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -63,19 +54,31 @@ const ManageUser = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const deleteData = async (id) => {
+  const handleChange = async (id, e) => {
+    console.log("ไอดี ", id, "สถานะ ", e.target.value);
+    const value = {
+      id: id,
+      role: e.target.value,
+    };
     await axios
-      .delete(`${import.meta.env.VITE_URL}/deleteproduct/${id}`)
-      .then(() => {
-        alert("ลบข้อมูลเรียบร้อย");
-        window.location.reload();
+      .post(`${import.meta.env.VITE_URL}/changerole`, value, {
+        headers: {
+          Authorization: user.user.token,
+        },
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        alert(
+          `เปลี่ยนสถานะของผู้ใช้งาน ${res.data.email} เป็น ${res.data.role} เรียบร้อยครับ.`
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 500, maxWidth: "100%" }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -91,31 +94,28 @@ const ManageUser = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataRows
+            {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    <TableCell align="left">{index + 1}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell align="center">{format(row.price)} ฿.</TableCell>
-                    <TableCell align="center">
-                      {format(row.stock)} ชิ้น
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.password}</TableCell>
+                    <TableCell>
+                      <Select
+                        defaultValue={row.role}
+                        style={{ width: "100px" }}
+                        onChange={(e) => handleChange(row._id, e)}
+                      >
+                        {role.map((item, index) => (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => deleteData(row._id)}
-                      >
-                        <DeleteForeverIcon />
-                      </Button>{" "}
-                      <Button
-                        variant="outlined"
-                        href={`/admin/edit/${row._id}`}
-                      >
-                        <EditNoteIcon />
-                      </Button>
+                    <TableCell>
+                      {new Date(row.updatedAt).toLocaleString()}
                     </TableCell>
                   </TableRow>
                 );
@@ -124,9 +124,9 @@ const ManageUser = () => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 20, 30]}
+        rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={dataRows.length}
+        count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -134,6 +134,4 @@ const ManageUser = () => {
       />
     </Paper>
   );
-};
-
-export default ManageUser;
+}
