@@ -4,6 +4,7 @@ const {
   register,
   currentUser,
   adminCheck,
+  loginLine,
 } = require("../controller/authController");
 const router = express.Router();
 const { auth } = require("../middleware/auth");

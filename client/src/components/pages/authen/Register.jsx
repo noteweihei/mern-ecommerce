@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -13,6 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -48,9 +47,24 @@ export default function Register() {
       .post(`${import.meta.env.VITE_URL}/register`, dataCustom)
       .then((res) => {
         console.log(res);
-        alert(res.data);
+        if (res.data !== "คุณมีข้อมูลอยู่แล้ว") {
+          toast.success(res.data, {
+            autoClose: 1000,
+            theme: "colored",
+          });
+        } else {
+          toast.error(res.data, {
+            autoClose: 1000,
+            theme: "colored",
+          });
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error(err, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+      });
   };
 
   return (

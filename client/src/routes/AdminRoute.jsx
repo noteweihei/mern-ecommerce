@@ -30,17 +30,17 @@ const AdminRoute = ({ children }) => {
     }
   }, [user]);
 
-  return check ? (
-    <div>
-      <NavtopRes />
-      <main style={{ marginTop: "6rem" }}>
-        <div>
-          <Box m="20px">{children}</Box>
-        </div>
-      </main>
-    </div>
-  ) : (
-    <Page404 />
+  return (
+    check && (
+      <div>
+        <NavtopRes />
+        <main style={{ marginTop: "6rem" }}>
+          <div>
+            <Box m="20px">{children}</Box>
+          </div>
+        </main>
+      </div>
+    )
   );
 };
 

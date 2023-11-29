@@ -4,6 +4,7 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ListProduct from "./ListProduct";
+import { toast } from "react-toastify";
 
 const DataProduct = () => {
   const [dataProduct, setDataProduct] = useState({});
@@ -20,12 +21,20 @@ const DataProduct = () => {
           Authorization: auth,
         },
       })
-      .then(() => {
-        alert("บันทึกข้อมูลเรียบร้อย");
-        window.location.reload();
+      .then((res) => {
+        toast.success(`บันทึก ${res.data.name} เรียบร้อยแล้ว`, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
-        alert(err);
+        toast.error("เกิดข้อผิดพลาดในการบันทึกสินค้า", err, {
+          autoClose: 1000,
+          theme: "colored",
+        });
         e.preventDefault();
       });
   };

@@ -1,3 +1,4 @@
+const { notifyline } = require("../function/notifyLine");
 const Users = require("../model/userData");
 const jwt = require("jsonwebtoken");
 //สมัคร username && password เพื่อเข้าใช้งาน
@@ -38,6 +39,9 @@ exports.login = async (req, res) => {
           role: users.role,
         },
       };
+      // notify line
+      const text = `${users.email} มีการเข้าใช้งานระบบ`;
+      await notifyline(process.env.TOKEN_LINE, text);
       // 3. Generate
       jwt.sign(
         payload,
@@ -49,6 +53,7 @@ exports.login = async (req, res) => {
         }
       );
     } else {
+      console.log(ip);
       return res.send("ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง");
     }
   } catch (error) {

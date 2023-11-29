@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { toast } from "react-toastify";
 
 const ListProduct = () => {
   const columns = [
@@ -42,19 +43,16 @@ const ListProduct = () => {
   const format = (value) => value.toLocaleString("en-US");
   const auth = localStorage.getItem("token");
   React.useEffect(() => {
-    const fetchData = async () => {
-      await axios
-        .get(`${import.meta.env.VITE_URL}/product`)
-        .then((res) => {
-          setDataRows(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-
-    return () => {
-      fetchData();
-    };
+    fetchData();
   }, []);
+  const fetchData = async () => {
+    await axios
+      .get(`${import.meta.env.VITE_URL}/product`)
+      .then((res) => {
+        setDataRows(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -71,11 +69,19 @@ const ListProduct = () => {
           Authorization: auth,
         },
       })
-      .then(() => {
-        alert("ลบข้อมูลเรียบร้อย");
-        window.location.reload();
+      .then((res) => {
+        toast.success(`ลบข้อมูล ${res.data.name} เรียบร้อยแล้ว`, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+        fetchData();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error("เกิดข้อผิดพลาด Server Error", err, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+      });
   };
 
   return (

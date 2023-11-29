@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
-
+import { toast } from "react-toastify";
 const EditProduct = () => {
   const params = useParams();
   const [product, setProduct] = useState({
@@ -31,7 +31,11 @@ const EditProduct = () => {
         setProduct(res.data);
         setOldImg(res.data.file);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error("เกิดข้อผิดพลาด Server Error ", err, {
+          autoClose: 1000,
+        });
+      });
   };
 
   const handleSubmit = async (e) => {
@@ -49,10 +53,20 @@ const EditProduct = () => {
         },
       })
       .then((res) => {
-        alert("ทำการอัพเดทข้อมูลเรียบร้อย", res);
-        window.location.reload();
+        toast.success(`บันทึก ${res.data.name} เรียบร้อยแล้ว`, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error("เกิดข้อผิดพลาด Server Error", err, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+      });
   };
 
   const handleChange = (e) => {

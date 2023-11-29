@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -18,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 // redux ส่งข้อมูลเข้า store
 import { useDispatch } from "react-redux";
 import { login as loginRedux } from "../../../store/userSlice";
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -55,7 +54,14 @@ export default function Login() {
     axios
       .post(`${import.meta.env.VITE_URL}/login`, dataCustom)
       .then((res) => {
-        alert("เข้าสู่ระบบเรียบร้อย");
+        console.log(res);
+        toast.success(
+          `ยินดีต้อนรับคุณ ${res.data.payload.user.name} เข้าสู่ระบบ`,
+          {
+            autoClose: 3000,
+            theme: "colored",
+          }
+        );
         dispatch(
           loginRedux({
             name: res.data.payload.user.name,
@@ -67,7 +73,11 @@ export default function Login() {
         roleRedirect(res.data.payload.user.role);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error("Email หรือ รหัสผ่านไม่ถูกต้อง", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
       });
   };
 

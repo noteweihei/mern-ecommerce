@@ -20,6 +20,8 @@ import { login } from "./store/userSlice";
 import Page404 from "./components/Page404";
 import { CssBaseline } from "@mui/material";
 import ManageUser from "./components/pages/admin/ManageUser";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -51,6 +53,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <CssBaseline />
+      <ToastContainer />
       <Routes>
         {/* public */}
         <Route path="/" element={<HomeComponent />} />
