@@ -10,3 +10,59 @@ body {
   width: 100%;
   z-index: 111;
 }
+
+.cart {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  margin: 10px;
+  flex: 1;
+}
+.cart img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+.detail {
+  display: flex;
+  align-content: center;
+  width: 300px;
+  gap: 10px;
+}
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+.count {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 300px;
+  gap: 10px;
+  margin: 0 auto;
+}
+.count span {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-color: gray;
+  border-radius: 50px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+.count > input {
+  background: none;
+  border: none;
+  width: 30px;
+  font-size: 1.2rem;
+  text-align: center;
+}

@@ -9,7 +9,7 @@ exports.notifyline = async (token, message) => {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: "Bearer " + token,
       },
-      data: "message=" + message,
+      data: `message=${message} ${new Date().toLocaleString()}`,
     });
   } catch (error) {
     console.log(error);

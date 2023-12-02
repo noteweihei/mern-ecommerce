@@ -13,7 +13,7 @@ const UserRoute = ({ children }) => {
           {children}
         </>
       ) : (
-        <Page404 />
+        ""
       )}
     </>
   );

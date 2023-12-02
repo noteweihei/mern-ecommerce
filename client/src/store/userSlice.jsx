@@ -17,9 +17,6 @@ export const userSlice = createSlice({
       state.user = [];
       localStorage.clear();
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
   },
 });
 

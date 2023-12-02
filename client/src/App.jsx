@@ -1,25 +1,28 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import axios from "axios";
 // Redux/toolkit
 import { useDispatch } from "react-redux";
+import { login } from "./store/userSlice";
 // public
 import HomeComponent from "./components/HomeComponent";
+import Product from "./components/home/Product";
+import SingleProduct from "./components/home/SingleProduct";
+import Page404 from "./components/Page404";
+import { CssBaseline } from "@mui/material";
 // login && Register
 import Register from "./components/pages/authen/Register";
 import Login from "./components/pages/authen/Login";
 // user
 import HomePageUser from "./components/pages/user/HomePageUser";
 import UserRoute from "./routes/UserRoute";
+import CheckOut from "./components/pages/user/CheckOut";
 // admin
 import AdminRoute from "./routes/AdminRoute";
 import HomePageAdmin from "./components/pages/admin/HomePageAdmin";
 import DataProduct from "./components/pages/admin/DataProduct";
 import EditProduct from "./components/pages/admin/EditProduct";
-import { login } from "./store/userSlice";
-import Page404 from "./components/Page404";
-import { CssBaseline } from "@mui/material";
 import ManageUser from "./components/pages/admin/ManageUser";
+// แจ้งเตือน
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -57,7 +60,8 @@ const App = () => {
       <Routes>
         {/* public */}
         <Route path="/" element={<HomeComponent />} />
-        <Route path="/product" element={<HomeComponent />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Page404 />} />
@@ -66,7 +70,23 @@ const App = () => {
           path="/user"
           element={
             <UserRoute>
+              <HomeComponent />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/user/cart"
+          element={
+            <UserRoute>
               <HomePageUser />
+            </UserRoute>
+          }
+        />
+        <Route
+          path="/user/checkout"
+          element={
+            <UserRoute>
+              <CheckOut />
             </UserRoute>
           }
         />

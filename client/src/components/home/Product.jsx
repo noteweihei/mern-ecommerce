@@ -12,30 +12,23 @@ import Container from "@mui/material/Container";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import ResponsiveAppBar from "../Layout/ResponsiveAppBar";
-import Bestseller from "./home/Bestseller";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import ResponsiveAppBar from "../../Layout/ResponsiveAppBar";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function HomeComponent() {
+export default function Product() {
   const [product, setProduct] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const format = (value) => value.toLocaleString("en-US");
-  const databy = [3, "createdAt", "desc"];
   const fetchData = async () => {
     await axios
-      .post(`${import.meta.env.VITE_URL}/productby`, {
-        limit: databy[0],
-        sort: databy[1],
-        order: databy[2],
-      })
+      .get(`${import.meta.env.VITE_URL}/product`)
       .then((res) => {
         setTimeout(() => {
           setProduct(res.data);
           setLoading(false);
-        }, 1500);
+        }, 1000);
       })
       .catch((err) => console.log(err));
   };
@@ -48,8 +41,8 @@ export default function HomeComponent() {
       <CssBaseline />
       <ResponsiveAppBar />
       <Container sx={{ py: 1, my: 10 }} maxWidth="md">
-        {/* New Products */}
-        <h1>สินค้ามาใหม่</h1>
+        {/* All Products */}
+        <h1>สินค้าทั้งหมด</h1>
         {loading ? (
           <div className="text-center" type="button" disabled>
             <span
@@ -82,11 +75,19 @@ export default function HomeComponent() {
                     <Typography gutterBottom variant="h5" component="h2">
                       {data.name.substring(0, 20)}
                     </Typography>
+                    <Typography>{data.desp.substring(0, 50)} ......</Typography>
                   </CardContent>
                   <CardActions className="d-flex justify-content-between">
-                    <Button size="small">ราคา {format(data.price)} บาท</Button>
-                    <Button size="small" href={`/product/${data._id}`}>
-                      <VisibilityIcon titleAccess="ดูสินค้าเพิ่มเติม" />
+                    <Typography color="primary">
+                      ราคา {format(data.price)} บาท
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                      href={`/product/${data._id}`}
+                    >
+                      ดูเพิ่มเติม
                     </Button>
                   </CardActions>
                 </Card>
@@ -94,10 +95,6 @@ export default function HomeComponent() {
             ))}
           </Grid>
         )}
-        <hr />
-        {/* Best Seller */}
-        <h1>สินค้าแนะนำ</h1>
-        <Bestseller />
       </Container>
     </ThemeProvider>
   );

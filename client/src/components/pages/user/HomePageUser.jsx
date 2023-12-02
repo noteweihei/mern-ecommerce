@@ -1,75 +1,100 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ResponsiveAppBar from "../../../Layout/ResponsiveAppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
-
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { Button } from "@mui/material";
+import CartProduct from "./CartProduct";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import axios from "axios";
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
-export default function HomePageUser() {
-  const [product, setProduct] = React.useState([]);
-  React.useEffect(() => {
-    const fetchData = async () => {
-      await axios
-        .get(`${import.meta.env.VITE_URL}/product`)
-        .then((res) => {
-          setProduct(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
+const HomePageUser = () => {
+  const [total, setTotal] = useState(0);
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
+  const format = (value) => value.toLocaleString("en-US");
+  const navigate = useNavigate();
 
-    return () => {
-      fetchData();
-    };
-  }, []);
+  useEffect(() => {
+    const cartAmount = cart
+      .filter((data) => data.price)
+      .map((item) => item.price * item.count);
+    const totalAmount = cartAmount.reduce((num, value) => (num += value), 0);
+    setTotal(totalAmount);
+  }, [cart, setTotal]);
+
+  const checkOut = () => {
+    axios
+      .post(`${import.meta.env.VITE_URL}/usercart`, cart, {
+        headers: {
+          Authorization: user.user.token,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        navigate("/user/checkout");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // toast.info("กรอกชื่อที่อยู่", {
+    //   position: "bottom-right",
+    //   autoClose: 1000,
+    //   theme: "colored",
+    // });
+    //
+  };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <div>
       <CssBaseline />
+      <ResponsiveAppBar />
       <Container sx={{ py: 1, my: 10 }} maxWidth="md">
-        <Grid container spacing={4}>
-          {product.map((data, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <CardMedia
-                  component="div"
-                  sx={{
-                    // 16:9
-                    pt: "56.25%",
-                  }}
-                  image={`${import.meta.env.VITE_LINK_IMG}/${data.file}`}
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {data.name}
-                  </Typography>
-                  <Typography>{data.desp.substring(0, 180)}</Typography>
-                </CardContent>
-                <CardActions className="d-flex justify-content-between">
-                  <Button size="small">ราคา {data.price} บาท</Button>
-                  <Button size="small">สินค้ามี {data.stock} ชิ้น</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {cart.length === 0 ? (
+          <h1>ไม่มีสินค้าในตะกร้า</h1>
+        ) : (
+          <>
+            <div className="mb-3">
+              {cart.map((item, index) => (
+                <CartProduct key={index} item={item} />
+              ))}
+            </div>
+
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={6} padding={10}>
+                  <Item>
+                    <Typography marginBottom={2}>สรุปยอดชำระทั้งหมด</Typography>
+                    <Typography marginBottom={2}>
+                      จำนวน{" "}
+                      <span style={{ color: "blue" }}>{format(total)}</span> ฿
+                    </Typography>
+                    <Button variant="contained" onClick={checkOut}>
+                      ชำระเงิน
+                    </Button>
+                  </Item>
+                </Grid>
+              </Grid>
+            </Box>
+          </>
+        )}
       </Container>
-    </ThemeProvider>
+    </div>
   );
-}
+};
+
+export default HomePageUser;

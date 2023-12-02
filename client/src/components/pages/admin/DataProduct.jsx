@@ -1,14 +1,52 @@
-import axios from "axios";
-import { useState } from "react";
-
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ListProduct from "./ListProduct";
 import { toast } from "react-toastify";
+import axios from "axios";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
 const DataProduct = () => {
-  const [dataProduct, setDataProduct] = useState({});
+  const [dataProduct, setDataProduct] = React.useState({});
+  const [open, setOpen] = React.useState(false);
   const auth = localStorage.getItem("token");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataUploadIMG = new FormData();
@@ -55,108 +93,117 @@ const DataProduct = () => {
 
   return (
     <div>
-      <button
-        type="button"
-        className="btn btn-primary my-3 "
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "end",
+        }}
       >
-        เพิ่มสินค้า
-      </button>
-      {/* Modal Popup */}
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                ฟอร์มบันทึกสินค้า
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <Form
-                className="my-5"
-                onSubmit={handleSubmit}
-                encType="multipart/form-data"
-              >
-                <div className="row">
-                  <Form.Group
-                    className="mb-3 col-md-4"
-                    controlId="exampleForm.ControlInput1"
+        <Button variant="outlined" onClick={handleClickOpen}>
+          เพิ่มสินค้า
+        </Button>
+        <BootstrapDialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+            บันทึกข้อมูลของสินค้า
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <DialogContent dividers>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    name="name"
+                    required
+                    fullWidth
+                    label="ชื่อสินค้า"
+                    autoFocus
+                    onChange={(event) => handleChange(event)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="text"
+                    required
+                    fullWidth
+                    name="desp"
+                    label="รายละเอียดสินค้า"
+                    multiline
+                    rows={4}
+                    onChange={(event) => handleChange(event)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="number"
+                    name="price"
+                    required
+                    fullWidth
+                    label="ราคา"
+                    autoFocus
+                    onChange={(event) => handleChange(event)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="number"
+                    name="stock"
+                    required
+                    fullWidth
+                    label="จำนวนสินค้า"
+                    autoFocus
+                    onChange={(event) => handleChange(event)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
                   >
-                    <Form.Label>ชื่อสินค้า</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="name"
-                      placeholder="ป้อนชื่อสินค้า"
-                      onChange={(event) => handleChange(event)}
-                    />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3 col-md-6"
-                    controlId="exampleForm.ControlTextarea1"
-                  >
-                    <Form.Label>รายละเอียดสินค้า</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      name="desp"
-                      rows={3}
-                      placeholder="ป้อนรายละเอียดสินค้า"
-                      onChange={(event) => handleChange(event)}
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formFile" className="mb-3 col-md-4">
-                    <Form.Label>อัพโหลดรูปภาพ</Form.Label>
-                    <Form.Control
+                    เพิ่มรูปสินค้า
+                    <VisuallyHiddenInput
                       type="file"
                       name="file"
                       onChange={(event) => handleChange(event)}
                     />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3 col-md-4"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>ราคา</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="price"
-                      placeholder="ระบุราคา"
-                      onChange={(event) => handleChange(event)}
-                    />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3 col-md-4"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>สต๊อกสินค้า</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="stock"
-                      placeholder="ป้อนสต๊อกสินค้าในคลัง"
-                      onChange={(event) => handleChange(event)}
-                    />
-                  </Form.Group>
-                </div>
-                <Button variant="danger" type="submit">
-                  บันทึกข้อมูล
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
+                  </Button>
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                บันทึกข้อมูล
+              </Button>
+            </Box>
+          </DialogContent>
+        </BootstrapDialog>
+      </Box>
       <ListProduct />
     </div>
   );

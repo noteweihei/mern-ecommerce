@@ -21,6 +21,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "none.jpg",
     },
+    sold: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

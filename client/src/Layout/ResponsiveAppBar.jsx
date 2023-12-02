@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,27 +21,32 @@ import Profile from "../assets/profile.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/userSlice";
 
+// Cart Style
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+
+// Cart Style
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -1,
+    top: 8,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
+
 function ResponsiveAppBar() {
   const pages = [
+    {
+      title: "หน้าแรก",
+      icon: "",
+      to: "/",
+    },
     {
       title: "สินค้าทั้งหมด",
       icon: "",
       to: "/product",
-    },
-    {
-      title: "บริการ",
-      icon: "",
-      to: "/service",
-    },
-    {
-      title: "ติดตามสินค้า",
-      icon: "",
-      to: "/contract",
-    },
-    {
-      title: "ติดต่อร้านค้า",
-      icon: "",
-      to: "/contact",
     },
   ];
 
@@ -66,7 +71,7 @@ function ResponsiveAppBar() {
     },
   ];
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -78,7 +83,7 @@ function ResponsiveAppBar() {
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
+  const [quantity, setQuantity] = useState(0);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -93,6 +98,13 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  useEffect(() => {
+    const cartcount = cart
+      .filter((data) => data.count)
+      .map((item) => item.count);
+    const result = cartcount.reduce((num, value) => (num += value), 0);
+    setQuantity(result);
+  }, [cart, setQuantity]);
 
   return (
     <AppBar
@@ -102,6 +114,7 @@ function ResponsiveAppBar() {
         position: "fixed",
         top: "0",
         left: "0",
+        zIndex: "111",
       }}
     >
       <Container maxWidth="xl">
@@ -127,7 +140,6 @@ function ResponsiveAppBar() {
             </IconButton>
           </Typography>
           {/* /LOGO */}
-
           {/* Minimize Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -186,7 +198,6 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
           {/* /Minimize Menu */}
-
           {/* LOGO Minimize */}
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
@@ -210,7 +221,6 @@ function ResponsiveAppBar() {
             </IconButton>
           </Typography>
           {/* /LOGO Minimize */}
-
           {/* Menu Left Full */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page, index) => (
@@ -226,7 +236,6 @@ function ResponsiveAppBar() {
             ))}
           </Box>
           {/* /Menu Left Full */}
-
           {/* Menu Right Full */}
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
             {user.user.role !== "user" &&
@@ -248,7 +257,23 @@ function ResponsiveAppBar() {
               ))}
           </Box>
           {/* /Menu Right Full */}
-
+          {/* Cart shopping */}
+          {user.user.role === "user" && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="ตะกร้าสินค้า">
+                <IconButton sx={{ p: 0 }} aria-label="cart" href="/user/cart">
+                  <StyledBadge badgeContent={quantity} color="secondary">
+                    <LocalMallIcon
+                      fontSize="large"
+                      style={{ color: "#ff3d00" }}
+                    />
+                  </StyledBadge>
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+          &nbsp; &nbsp; &nbsp;
+          {/* Cart shopping */}
           {/* User Menu */}
           {user.user.role === "user" && (
             <Box sx={{ flexGrow: 0 }}>
@@ -296,7 +321,6 @@ function ResponsiveAppBar() {
               </Menu>
             </Box>
           )}
-
           {/* /User Menu */}
         </Toolbar>
       </Container>

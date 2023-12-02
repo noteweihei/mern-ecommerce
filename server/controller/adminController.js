@@ -1,6 +1,7 @@
 // ติดต่อกับฐานข้อมูล / ดำเนินการกับฐานข้อมูล
 const Products = require("../model/products");
 const fs = require("fs");
+
 exports.product = async (req, res) => {
   try {
     const getAll = await Products.find({}).exec();
@@ -9,6 +10,35 @@ exports.product = async (req, res) => {
     res.status(500).json({ error: "ไม่พบข้อมูลสินค้าทั้งหมด" });
   }
 };
+
+exports.productby = async (req, res) => {
+  try {
+    const { limit, sort, order } = req.body;
+
+    const getAll = await Products.find({})
+      .limit(limit)
+      .sort([[sort, order]])
+      .exec();
+    res.json(getAll);
+  } catch (error) {
+    res.status(500).json({ error: "ไม่พบข้อมูลสินค้าทั้งหมด" });
+  }
+};
+
+exports.productbest = async (req, res) => {
+  try {
+    const { limit, sort, order } = req.body;
+
+    const getAll = await Products.find({})
+      .limit(limit)
+      .sort([[sort, order]])
+      .exec();
+    res.json(getAll);
+  } catch (error) {
+    res.status(500).json({ error: "ไม่พบข้อมูลสินค้าทั้งหมด" });
+  }
+};
+
 exports.singleProduct = async (req, res) => {
   try {
     const id = req.params.id;

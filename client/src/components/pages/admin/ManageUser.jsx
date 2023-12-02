@@ -11,11 +11,13 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { MenuItem, Select } from "@mui/material";
 
+import Switch from "@mui/material/Switch";
+
 const columns = [
   { id: "email", label: "Email", minWidth: 170 },
-  { id: "password", label: "Password", minWidth: 170 },
-  { id: "role", label: "Role", minWidth: 170 },
-  { id: "date", label: "Last Login", minWidth: 170 },
+  { id: "role", label: "สิทธิ์การใช้งาน", minWidth: 170 },
+  { id: "create", label: "วันที่ลงทะเบียน", minWidth: 170 },
+  { id: "date", label: "เข้าใช้งานล่าสุด", minWidth: 170 },
 ];
 
 export default function StickyHeadTable() {
@@ -54,8 +56,8 @@ export default function StickyHeadTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   const handleChange = async (id, e) => {
-    console.log("ไอดี ", id, "สถานะ ", e.target.value);
     const value = {
       id: id,
       role: e.target.value,
@@ -68,7 +70,7 @@ export default function StickyHeadTable() {
       })
       .then((res) => {
         alert(
-          `เปลี่ยนสถานะของผู้ใช้งาน ${res.data.email} เป็น ${res.data.role} เรียบร้อยครับ.`
+          `เปลี่ยนสิทธิ์ของผู้ใช้งาน ${res.data.email} เป็น ${res.data.role} เรียบร้อยครับ.`
         );
       })
       .catch((err) => {
@@ -100,7 +102,6 @@ export default function StickyHeadTable() {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.password}</TableCell>
                     <TableCell>
                       <Select
                         defaultValue={row.role}
@@ -113,6 +114,9 @@ export default function StickyHeadTable() {
                           </MenuItem>
                         ))}
                       </Select>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(row.createdAt).toLocaleString()}
                     </TableCell>
                     <TableCell>
                       {new Date(row.updatedAt).toLocaleString()}
