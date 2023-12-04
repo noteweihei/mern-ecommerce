@@ -1,5 +1,7 @@
 // ติดต่อกับฐานข้อมูล / ดำเนินการกับฐานข้อมูล
 const Products = require("../model/products");
+const Users = require("../model/userData");
+const Orders = require("../model/orders");
 const fs = require("fs");
 
 exports.product = async (req, res) => {
@@ -90,5 +92,32 @@ exports.deleteProduct = async (req, res) => {
     res.json(deletePd);
   } catch (error) {
     res.status(500).json({ error: "ไม่พบข้อมูลที่ต้องการจะลบ" });
+  }
+};
+
+exports.getOrderUser = async (req, res) => {
+  try {
+    let order = await Orders.find({})
+      .populate("products.product orderdBy")
+      .exec();
+    res.json(order);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("สถานะเซิร์ฟเวอร์ผิดปกติ");
+  }
+};
+
+exports.changeStatus = async (req, res) => {
+  try {
+    const { orderID, orderstatus } = req.body;
+    let updateOrder = await Orders.findByIdAndUpdate(
+      orderID,
+      { orderstatus },
+      { new: true }
+    );
+    res.send(updateOrder);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("สถานะเซิร์ฟเวอร์ผิดปกติ");
   }
 };

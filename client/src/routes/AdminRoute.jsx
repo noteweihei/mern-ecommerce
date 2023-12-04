@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import NavtopRes from "../components/pages/admin/NavtopRes";
 import { useSelector } from "react-redux";
-import Page404 from "../components/Page404";
 import axios from "axios";
 
 const AdminRoute = ({ children }) => {

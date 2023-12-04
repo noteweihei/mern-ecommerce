@@ -45,7 +45,6 @@ const HomePageUser = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         navigate("/user/checkout");
       })
       .catch((err) => {
@@ -65,7 +64,7 @@ const HomePageUser = () => {
       <ResponsiveAppBar />
       <Container sx={{ py: 1, my: 10 }} maxWidth="md">
         {cart.length === 0 ? (
-          <h1>ไม่มีสินค้าในตะกร้า</h1>
+          <h1 style={{ textAlign: "center" }}>ไม่มีสินค้าในตะกร้า</h1>
         ) : (
           <>
             <div className="mb-3">
@@ -78,13 +77,12 @@ const HomePageUser = () => {
               <Grid container spacing={2}>
                 <Grid item xs={6} padding={10}>
                   <Item>
-                    <Typography marginBottom={2}>สรุปยอดชำระทั้งหมด</Typography>
                     <Typography marginBottom={2}>
-                      จำนวน{" "}
+                      ราคารวม{" "}
                       <span style={{ color: "blue" }}>{format(total)}</span> ฿
                     </Typography>
                     <Button variant="contained" onClick={checkOut}>
-                      ชำระเงิน
+                      Check Out
                     </Button>
                   </Item>
                 </Grid>

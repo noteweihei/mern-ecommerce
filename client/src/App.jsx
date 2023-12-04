@@ -16,12 +16,14 @@ import Login from "./components/pages/authen/Login";
 import HomePageUser from "./components/pages/user/HomePageUser";
 import UserRoute from "./routes/UserRoute";
 import CheckOut from "./components/pages/user/CheckOut";
+import HistoryOrder from "./components/pages/user/HistoryOrder";
 // admin
 import AdminRoute from "./routes/AdminRoute";
 import HomePageAdmin from "./components/pages/admin/HomePageAdmin";
 import DataProduct from "./components/pages/admin/DataProduct";
 import EditProduct from "./components/pages/admin/EditProduct";
 import ManageUser from "./components/pages/admin/ManageUser";
+import OrdersAdmin from "./components/pages/admin/OrdersAdmin";
 // แจ้งเตือน
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -90,6 +92,14 @@ const App = () => {
             </UserRoute>
           }
         />
+        <Route
+          path="/user/history"
+          element={
+            <UserRoute>
+              <HistoryOrder />
+            </UserRoute>
+          }
+        />
 
         {/* admin */}
         <Route
@@ -121,6 +131,14 @@ const App = () => {
           element={
             <AdminRoute>
               <ManageUser />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/order"
+          element={
+            <AdminRoute>
+              <OrdersAdmin />
             </AdminRoute>
           }
         />

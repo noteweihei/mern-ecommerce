@@ -16,7 +16,7 @@ import Switch from "@mui/material/Switch";
 const columns = [
   { id: "email", label: "Email", minWidth: 170 },
   { id: "role", label: "สิทธิ์การใช้งาน", minWidth: 170 },
-  { id: "create", label: "วันที่ลงทะเบียน", minWidth: 170 },
+  { id: "addrees", label: "ที่อยู่", minWidth: 170 },
   { id: "date", label: "เข้าใช้งานล่าสุด", minWidth: 170 },
 ];
 
@@ -115,9 +115,7 @@ export default function StickyHeadTable() {
                         ))}
                       </Select>
                     </TableCell>
-                    <TableCell>
-                      {new Date(row.createdAt).toLocaleString()}
-                    </TableCell>
+                    <TableCell>{row.address}</TableCell>
                     <TableCell>
                       {new Date(row.updatedAt).toLocaleString()}
                     </TableCell>

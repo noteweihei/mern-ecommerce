@@ -25,6 +25,7 @@ import { logout } from "../store/userSlice";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import HistoryIcon from "@mui/icons-material/History";
 
 // Cart Style
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -265,7 +266,7 @@ function ResponsiveAppBar() {
                   <StyledBadge badgeContent={quantity} color="secondary">
                     <LocalMallIcon
                       fontSize="large"
-                      style={{ color: "#ff3d00" }}
+                      style={{ color: "#FF3300" }}
                     />
                   </StyledBadge>
                 </IconButton>
@@ -274,6 +275,22 @@ function ResponsiveAppBar() {
           )}
           &nbsp; &nbsp; &nbsp;
           {/* Cart shopping */}
+          {/* History shopping */}
+          {user.user.role === "user" && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="ประวัติการสั่งซื้อ">
+                <IconButton
+                  sx={{ p: 0 }}
+                  aria-label="cart"
+                  href="/user/history"
+                >
+                  <HistoryIcon fontSize="large" style={{ color: "#33CC00" }} />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+          &nbsp; &nbsp; &nbsp;
+          {/* History shopping */}
           {/* User Menu */}
           {user.user.role === "user" && (
             <Box sx={{ flexGrow: 0 }}>
